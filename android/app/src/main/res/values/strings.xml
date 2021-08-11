@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EarnECash</string>
+    <string name="facebook_app_id">918939662232806</string>
+    <string name="fb_login_protocol_scheme">fb918939662232806</string>
+</resources>
