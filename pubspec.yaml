@@ -28,6 +28,8 @@ dependencies:
   carousel_pro: ^1.0.0
   flutter_search_bar: ^2.1.0
   razorpay_flutter: ^1.2.3
+  image_picker: ^0.6.5+2
+  image_cropper: ^1.4.0
 
 
 

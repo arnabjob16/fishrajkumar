@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:fishRajkumar/components/Config.dart';
 import 'package:fishRajkumar/components/NavBar.dart';
-import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:http/http.dart' as http;
 
 class DashboardPage extends StatefulWidget {
@@ -48,11 +47,6 @@ class _DashboardPageState extends State<DashboardPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  // Image.asset(
-                  //   "assets/logos/logo.png",
-                  //   fit: BoxFit.cover,
-                  //   height: 60,
-                  // ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -248,111 +242,123 @@ class _DashboardPageState extends State<DashboardPage> {
                   padding: const EdgeInsets.all(8),
                   itemCount: featuredproduct.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.43,
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                          child: Card(
-                              elevation: 3, // Change this
-                              shadowColor: Colors.black87,
-                              child: Container(
-                                  width: double.infinity,
-                                  height: 100.0,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Center(
-                                        child: new Image.network(
-                                            featuredproduct[index]
-                                                ["image_path"]),
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          SizedBox(
-                                            height: 12.0,
-                                          ),
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Row(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Flexible(
-                                                      child: Container(
-                                                          padding:
-                                                              new EdgeInsets
-                                                                      .only(
-                                                                  right: 10.0),
-                                                          child: new Text(
-                                                            featuredproduct[
-                                                                index]["name"],
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black38,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontSize: 14.0),
-                                                          )))
-                                                ],
-                                              )),
-                                          SizedBox(
-                                            height: 6.0,
-                                          ),
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Row(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text(
-                                                    '\u{20B9} ' +
-                                                        featuredproduct[index]
-                                                            ["sell_price"],
-                                                    style: TextStyle(
-                                                        color: Colors.black87,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 14.0),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 3.0,
-                                                  ),
-                                                  Text(
-                                                    '\u{20B9} ' +
-                                                        featuredproduct[index]
-                                                            ["base_price"],
-                                                    style: TextStyle(
-                                                        color: Colors.black45,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 12.0,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .lineThrough),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 3.0,
-                                                  ),
-                                                  Text(
-                                                    '20% off',
-                                                    style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 11.0,
+                    return GestureDetector(
+                      onTap: () {
+                        var route = new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new CheckoutPage());
+                        Navigator.of(context).push(route);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.43,
+                        child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 3.0, right: 3.0),
+                            child: Card(
+                                elevation: 3, // Change this
+                                shadowColor: Colors.black87,
+                                child: Container(
+                                    width: double.infinity,
+                                    height: 100.0,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Center(
+                                          child: new Image.network(
+                                              featuredproduct[index]
+                                                  ["image_path"]),
+                                        ),
+                                        Column(
+                                          children: <Widget>[
+                                            SizedBox(
+                                              height: 12.0,
+                                            ),
+                                            Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      width: 5.0,
                                                     ),
-                                                  )
-                                                ],
-                                              ))
-                                        ],
-                                      )
-                                    ],
-                                  )))),
+                                                    Flexible(
+                                                        child: Container(
+                                                            padding:
+                                                                new EdgeInsets
+                                                                        .only(
+                                                                    right:
+                                                                        10.0),
+                                                            child: new Text(
+                                                              featuredproduct[
+                                                                      index]
+                                                                  ["name"],
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black38,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      14.0),
+                                                            )))
+                                                  ],
+                                                )),
+                                            SizedBox(
+                                              height: 6.0,
+                                            ),
+                                            Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    Text(
+                                                      '\u{20B9} ' +
+                                                          featuredproduct[index]
+                                                              ["sell_price"],
+                                                      style: TextStyle(
+                                                          color: Colors.black87,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 14.0),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 3.0,
+                                                    ),
+                                                    Text(
+                                                      '\u{20B9} ' +
+                                                          featuredproduct[index]
+                                                              ["base_price"],
+                                                      style: TextStyle(
+                                                          color: Colors.black45,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 12.0,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .lineThrough),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 3.0,
+                                                    ),
+                                                    Text(
+                                                      '20% off',
+                                                      style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 11.0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
+                                          ],
+                                        )
+                                      ],
+                                    )))),
+                      ),
                     );
                   },
                 ),
@@ -397,7 +403,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           var route = new MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  new ProductPage());
+                                  new LoginPage());
                           Navigator.of(context).push(route);
                         },
                         child: Container(

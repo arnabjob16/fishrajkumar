@@ -321,46 +321,37 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
-      Map data = {'email': email, 'password': pass};
       var jsonResponse;
-      var response =
-          await http.post(Uri.parse(Config.site_url + "login.php"), body: data);
+      var loginData;
+      var response = await http.post(
+        Uri.parse(Config.site_url + 'login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body:
+            jsonEncode(<String, String>{'logininput': email, 'password': pass}),
+      );
       jsonResponse = json.decode(response.body);
+      print(jsonResponse);
       if (response.statusCode == 200) {
-        if (jsonResponse['result'] == 1) {
-          setState(() {});
-          sharedPreferences.setString("token", jsonResponse["user_data"]["id"]);
+        if (jsonResponse['success'] == true) {
+          setState(() {
+            loginData = jsonResponse['data']['user_data'];
+          });
+          sharedPreferences.setString("userid", loginData["id"].toString());
+          sharedPreferences.setString("name", loginData["name"]);
+          //sharedPreferences.setString(
+          //    "profile_image", loginData["profile_image"]);
+          sharedPreferences.setString("email", loginData["email"]);
+          sharedPreferences.setString("phone", loginData["mobile"]);
           sharedPreferences.setString(
-              "name", jsonResponse["user_data"]["name"]);
-          sharedPreferences.setString(
-              "first_name", jsonResponse["user_data"]["first_name"]);
-          sharedPreferences.setString(
-              "last_name", jsonResponse["user_data"]["last_name"]);
-          sharedPreferences.setString(
-              "email", jsonResponse["user_data"]["email"]);
-          sharedPreferences.setString(
-              "phone", jsonResponse["user_data"]["phone"]);
-          sharedPreferences.setString(
-              "countryCode", jsonResponse["user_data"]["country_code"]);
-          sharedPreferences.setString(
-              "profession", jsonResponse["user_data"]["profession"]);
-          sharedPreferences.setString("other_profession",
-              jsonResponse["user_data"]["other_profession"]);
-          sharedPreferences.setString(
-              "photo", jsonResponse["user_data"]["photo"]);
-          sharedPreferences.setString(
-              "refer_text", jsonResponse["user_data"]["refer_text"]);
-          sharedPreferences.setString(
-              "refer_link", jsonResponse["user_data"]["refer_link"]);
-
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(
-          //         builder: (BuildContext context) => DashboardPage()),
-          //     (Route<dynamic> route) => false);
+              "shipping", jsonResponse['data']['shipping_charge']);
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
         } else {
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(jsonResponse["msg"]),
+            content: Text(jsonResponse["message"]),
             backgroundColor: Colors.red,
           ));
           Navigator.of(context).pop();

@@ -6,6 +6,14 @@ import 'package:fishRajkumar/components/NavBar.dart';
 import 'package:flutter/services.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+double shipping;
+var userid = '';
+var email = '';
+var mobile = '';
+double subtotal = 0.00;
+double alltotal = 0.00;
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -18,11 +26,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void initState() {
     super.initState();
+    subtotal = 0.00;
+    alltotal = 0.00;
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _incrementCounter();
     getcartproduct();
+  }
+
+  _incrementCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      shipping = double.parse(prefs.getString('shipping'));
+      email = prefs.getString('email');
+      mobile = prefs.getString('mobile');
+      userid = prefs.getString('userid');
+    });
   }
 
   static const platform = const MethodChannel("razorpay_flutter");
@@ -110,119 +131,134 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     padding: const EdgeInsets.all(8),
                     itemCount: cartProduct.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          var route = new MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new CheckoutPage());
-                          Navigator.of(context).push(route);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 15.0),
-                          child: FittedBox(
-                            child: Material(
-                              color: Colors.white,
-                              elevation: 2.0,
-                              borderRadius: BorderRadius.circular(3.0),
-                              shadowColor: Colors.grey,
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    width:
-                                        MediaQuery.of(context).size.width * .4,
-                                    height:
-                                        MediaQuery.of(context).size.height / 5,
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: new Image.network(
-                                          cartProduct[index]['image_path'],
-                                        )),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    width:
-                                        MediaQuery.of(context).size.width * .6,
-                                    child: Column(
+                      return cartProductLoading
+                          ? CircularProgressIndicator()
+                          : GestureDetector(
+                              onTap: () {
+                                var route = new MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        new CheckoutPage());
+                                Navigator.of(context).push(route);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 15.0),
+                                child: FittedBox(
+                                  child: Material(
+                                    color: Colors.white,
+                                    elevation: 2.0,
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    shadowColor: Colors.grey,
+                                    child: Row(
                                       children: <Widget>[
                                         Container(
-                                          child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              cartProduct[index]
-                                                  ['product_name'],
-                                              style: TextStyle(
-                                                  color: Colors.blueAccent[700],
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15.0),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 6.0,
-                                        ),
-                                        Container(
-                                          child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              cartProduct[index]['weight']
-                                                      .toString() +
-                                                  ' ' +
-                                                  cartProduct[index]
-                                                      ['weight_unit'],
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 6.0,
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .4,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5,
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: new Image.network(
+                                                cartProduct[index]
+                                                    ['image_path'],
+                                              )),
                                         ),
                                         Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '\u{20B9}' +
+                                          padding:
+                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .6,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
                                                     cartProduct[index]
-                                                        ['total_price'],
-                                                style: TextStyle(
-                                                    color: Colors.black87,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 14.0),
+                                                        ['product_name'],
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .blueAccent[700],
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 15.0),
+                                                  ),
+                                                ),
                                               ),
+                                              SizedBox(
+                                                height: 6.0,
+                                              ),
+                                              Container(
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                    cartProduct[index]['weight']
+                                                            .toString() +
+                                                        ' ' +
+                                                        cartProduct[index]
+                                                            ['weight_unit'],
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: Colors.black87,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 6.0,
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0, 5, 0, 0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      '\u{20B9}' +
+                                                          cartProduct[index]
+                                                              ['total_price'],
+                                                      style: TextStyle(
+                                                          color: Colors.black87,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 14.0),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Container(
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                    '20% off',
+                                                    style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Container(
-                                          child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              '20% off',
-                                              style: TextStyle(
-                                                color: Colors.green,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 14.0,
-                                              ),
-                                            ),
-                                          ),
-                                        )
                                       ],
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      );
+                            );
                     }),
               ),
               Container(
@@ -270,7 +306,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 fontSize: 18.0),
                           ),
                           Text(
-                            '\u{20B9}' + '200',
+                            '\u{20B9}' + '${subtotal.toStringAsFixed(2)}',
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.w700,
@@ -290,7 +326,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 fontSize: 18.0),
                           ),
                           Text(
-                            '\u{20B9}' + '20',
+                            '\u{20B9}' + '${shipping.toStringAsFixed(2)}',
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.w700,
@@ -317,7 +353,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 fontSize: 18.0),
                           ),
                           Text(
-                            '\u{20B9}' + '220',
+                            '\u{20B9}' + '${alltotal.toStringAsFixed(2)}',
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.w700,
@@ -364,10 +400,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
 
     jsonResponse = json.decode(result.body);
-    print(jsonResponse);
+    //print(jsonResponse);
     if (result.statusCode == 200) {
       if (jsonResponse['success'] == true) {
+        jsonResponse['data'].forEach(
+            (v) => {subtotal = subtotal + double.parse(v['total_price'])});
         setState(() {
+          subtotal = subtotal;
+          alltotal = subtotal + shipping;
           cartProduct = jsonResponse['data'];
           cartProductLoading = false;
         });
@@ -394,10 +434,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void openCheckout() async {
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
-      'amount': 2000,
-      'name': 'Acme Corp.',
+      'amount': (alltotal * 100).toStringAsFixed(2),
+      'name': 'Rajkumar',
       'description': 'Fine T-Shirt',
-      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+      'prefill': {'contact': '8888888888', 'email': email},
       'external': {
         'wallets': ['paytm']
       }
