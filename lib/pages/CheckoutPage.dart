@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 double shipping;
 var userid = '';
 var email = '';
-var mobile = '';
+var phone = '';
 double subtotal = 0.00;
 double alltotal = 0.00;
 
@@ -41,7 +41,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     setState(() {
       shipping = double.parse(prefs.getString('shipping'));
       email = prefs.getString('email');
-      mobile = prefs.getString('mobile');
+      phone = prefs.getString('phone');
       userid = prefs.getString('userid');
     });
   }
@@ -388,7 +388,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Future<List<dynamic>> getcartproduct() async {
     var jsonResponse;
-
     var result = await http.post(
       Uri.parse(Config.site_url + "getcartdetails"),
       headers: <String, String>{
@@ -435,9 +434,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
       'amount': (alltotal * 100).toStringAsFixed(2),
+      //'amount': 500,
       'name': 'Rajkumar',
       'description': 'Fine T-Shirt',
-      'prefill': {'contact': '8888888888', 'email': email},
+      'prefill': {'contact': phone, 'email': email},
       'external': {
         'wallets': ['paytm']
       }

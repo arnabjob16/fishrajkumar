@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:fishRajkumar/components/Config.dart';
+import 'package:fishRajkumar/pages/RegisterPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _email = TextEditingController();
   //Getting the password from the textField
   final TextEditingController _password = TextEditingController();
-  final TextEditingController _guestTextFeild = TextEditingController();
   bool _obscureText = true;
 
   @override
@@ -61,6 +61,19 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       SizedBox(
                         height: 30.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/logos/logo.png",
+                            fit: BoxFit.cover,
+                            //color: Colors.black,
+                            colorBlendMode: BlendMode.color,
+                            width: 100,
+                            height: 100,
+                          ),
+                        ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -262,7 +275,12 @@ class _LoginPageState extends State<LoginPage> {
                                           fontSize: 16.0,
                                         ),
                                       ),
-                                      onTap: () {})
+                                      onTap: () {
+                                        var route = new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                new RegisterPage());
+                                        Navigator.of(context).push(route);
+                                      })
                                 ],
                               )),
                         ],
