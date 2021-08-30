@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fishRajkumar/pages/AddressListPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fishRajkumar/components/Config.dart';
 import 'package:fishRajkumar/components/NavBar.dart';
@@ -263,22 +264,45 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                padding: EdgeInsets.only(bottom: 10.0),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.black45,
-                      width: 1.0,
-                    ),
-                  ),
+                margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
+                child: Text(
+                  "Address",
+                  style: TextStyle(
+                      color: Colors.blueAccent[700],
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0),
                 ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
                 child: Text(
                   defaultaddress,
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18.0),
+                      fontSize: 16.0),
+                ),
+              ),
+              SizedBox(height: 5.0),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+                child: FractionallySizedBox(
+                  widthFactor:
+                      1, // means 100%, you can change this to 0.8 (80%)
+                  child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(3.0),
+                    ),
+                    color: Colors.blueAccent[700],
+                    onPressed: () {
+                      AddressListPage();
+                    },
+                    label: Text('Change & Add Address',
+                        style: TextStyle(color: Colors.white)),
+                    icon: Icon(Icons.home, color: Colors.white),
+                  ),
                 ),
               ),
               Container(
