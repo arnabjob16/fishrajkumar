@@ -399,7 +399,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
 
     jsonResponse = json.decode(result.body);
-    //print(jsonResponse);
+    print(jsonResponse);
     if (result.statusCode == 200) {
       if (jsonResponse['success'] == true) {
         jsonResponse['data'].forEach(

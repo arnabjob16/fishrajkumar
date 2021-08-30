@@ -403,7 +403,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           var route = new MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  new LoginPage());
+                                  new CheckoutPage());
                           Navigator.of(context).push(route);
                         },
                         child: Container(

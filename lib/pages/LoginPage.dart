@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:fishRajkumar/components/Config.dart';
+import 'package:fishRajkumar/pages/ForgotPasswordPage.dart';
 import 'package:fishRajkumar/pages/RegisterPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -220,7 +221,10 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       ),
                                       onTap: () {
-                                        ;
+                                        var route = new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                new ForgotPasswordPage());
+                                        Navigator.of(context).push(route);
                                       }),
                                 ],
                               )),
