@@ -245,8 +245,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     return GestureDetector(
                       onTap: () {
                         var route = new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new CheckoutPage());
+                            builder: (BuildContext context) => new LoginPage());
                         Navigator.of(context).push(route);
                       },
                       child: Container(
@@ -626,7 +625,7 @@ class _DashboardPageState extends State<DashboardPage> {
           todaysdealproduct = jsonResponse['data'];
           todaysdealLoading = false;
         });
-        print(todaysdealproduct);
+        //print(todaysdealproduct);
         //return jsonResponse['data'];
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

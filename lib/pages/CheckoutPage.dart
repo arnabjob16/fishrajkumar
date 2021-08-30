@@ -14,6 +14,7 @@ var email = '';
 var phone = '';
 double subtotal = 0.00;
 double alltotal = 0.00;
+String defaultaddress = '';
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   List cartProduct = [];
   bool cartProductLoading = true;
+  String defaultaddress = '';
   @override
   void initState() {
     super.initState();
@@ -156,11 +158,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .4,
+                                              .3,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height /
-                                              5,
+                                              8,
                                           child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
@@ -175,26 +177,59 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .6,
+                                              .7,
                                           child: Column(
                                             children: <Widget>[
-                                              Container(
-                                                child: Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    cartProduct[index]
-                                                        ['product_name'],
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .blueAccent[700],
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 15.0),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text(
+                                                        cartProduct[index]
+                                                            ['product_name'],
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                    .blueAccent[
+                                                                700],
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  Container(
+                                                    color:
+                                                        Colors.blueAccent[700],
+                                                    padding: EdgeInsets.all(6),
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        0, 5, 0, 0),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          '\u{20B9}' +
+                                                              cartProduct[index]
+                                                                  [
+                                                                  'total_price'],
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 14.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                               SizedBox(
-                                                height: 6.0,
+                                                height: 3.0,
                                               ),
                                               Container(
                                                 child: Align(
@@ -215,41 +250,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               SizedBox(
                                                 height: 6.0,
                                               ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    0, 5, 0, 0),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      '\u{20B9}' +
-                                                          cartProduct[index]
-                                                              ['total_price'],
-                                                      style: TextStyle(
-                                                          color: Colors.black87,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontSize: 14.0),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              Container(
-                                                child: Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    '20% off',
-                                                    style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14.0,
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
                                             ],
                                           ),
                                         ),
@@ -274,7 +274,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 child: Text(
-                  "+ Add Address",
+                  defaultaddress,
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.w700,
@@ -399,17 +399,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
 
     jsonResponse = json.decode(result.body);
-    print(jsonResponse);
+    print(jsonResponse['data']);
     if (result.statusCode == 200) {
       if (jsonResponse['success'] == true) {
-        jsonResponse['data'].forEach(
-            (v) => {subtotal = subtotal + double.parse(v['total_price'])});
+        jsonResponse['data']['cartdata'].forEach((v) => {
+              subtotal = subtotal + double.parse(v['total_price']),
+            });
         setState(() {
           subtotal = subtotal;
           alltotal = subtotal + shipping;
-          cartProduct = jsonResponse['data'];
+          cartProduct = jsonResponse['data']['cartdata'];
+          defaultaddress = jsonResponse['data']['defaultaddress']['address'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['pincode'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['city'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['state'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['country'];
           cartProductLoading = false;
         });
+
         //print(productCategories);
         //return jsonResponse['data'];
       } else {
