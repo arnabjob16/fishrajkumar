@@ -88,8 +88,8 @@ file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.0.0/lib/
 path_provider_platform_interface
 2.12
-file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/
-file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.1/lib/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.0/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_platform_interface-2.0.0/lib/
 path_provider_windows
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.1/
@@ -103,9 +103,9 @@ platform
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.0.0/
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.0.0/lib/
 plugin_platform_interface
-2.12
-file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.0/
-file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.0/lib/
+2.1
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.3/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.3/lib/
 process
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.1/
