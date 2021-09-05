@@ -1,19 +1,24 @@
 import 'package:fishRajkumar/pages/DashboardPage.dart';
 import 'package:flutter/material.dart';
+import 'package:fishRajkumar/pages/OrderListPage.dart';
 
 class NavBar extends StatefulWidget {
   @override
   _NavBarState createState() => _NavBarState();
 }
 
+int _selectedIndex = 0;
+
 class _NavBarState extends State<NavBar> {
-  int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 0) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => DashboardPage()));
+      } else if (_selectedIndex == 2) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => OrderListPage()));
       }
     });
   }
@@ -30,7 +35,7 @@ class _NavBarState extends State<NavBar> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.grid_view_rounded),
-          label: 'All Category',
+          label: 'All Products',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.open_in_browser_rounded),
