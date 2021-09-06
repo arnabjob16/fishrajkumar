@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fishRajkumar/components/Header.dart';
 import 'package:fishRajkumar/pages/AddressListPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fishRajkumar/components/Config.dart';
@@ -10,6 +11,9 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 double shipping;
+var rkey = '';
+var appname = '';
+var description = '';
 var userid = '';
 var email = '';
 var phone = '';
@@ -55,61 +59,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          // here the desired height
-          child: AppBar(
-            automaticallyImplyLeading: false, // hides leading widget
-            flexibleSpace: Column(children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // Image.asset(
-                  //   "assets/logos/logo.png",
-                  //   fit: BoxFit.cover,
-                  //   height: 60,
-                  // ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.26,
-                        ),
-                        Text("Fish ",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0)),
-                        Text("Rajkumar",
-                            style: TextStyle(
-                                color: Colors.yellow,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0))
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      IconButton(
-                        icon: new Icon(Icons.shopping_cart_outlined,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: new Icon(Icons.notifications_none_rounded,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ]),
-            backgroundColor: Colors.blueAccent[200],
-          ),
-        ),
+        appBar: Header(),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -412,6 +362,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Future<List<dynamic>> getcartproduct() async {
     var jsonResponse;
+    var PjsonResponse;
+    var payment = await http.post(
+      Uri.parse(Config.site_url + "paymentsettings"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    PjsonResponse = json.decode(payment.body);
+
+    if (payment.statusCode == 200) {
+      if (PjsonResponse['success'] == true) {
+        setState(() {
+          rkey = PjsonResponse['data']['key'];
+          appname = PjsonResponse['data']['name'];
+          description = PjsonResponse['data']['description'];
+        });
+      }
+    }
+    print(PjsonResponse);
+
     var result = await http.post(
       Uri.parse(Config.site_url + "getcartdetails"),
       headers: <String, String>{
@@ -421,7 +391,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'user_id': '1',
       }),
     );
-
     jsonResponse = json.decode(result.body);
     print(jsonResponse['data']);
     if (result.statusCode == 200) {
@@ -467,15 +436,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   void openCheckout() async {
     var options = {
-      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'key': rkey,
       'amount': (alltotal * 100).toStringAsFixed(2),
       //'amount': 500,
-      'name': 'Rajkumar',
-      'description': 'Fine T-Shirt',
+      'name': appname,
+      'description': description,
       'prefill': {'contact': phone, 'email': email},
-      'external': {
-        'wallets': ['paytm']
-      }
+      'external': {}
     };
 
     try {

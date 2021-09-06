@@ -41,10 +41,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         body: jsonEncode(<String, String>{'product_id': '2'}),
       );
 
-      print(response);
       if (response.statusCode == 200) {
         jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
         setState(() {
           print(response);
           productDetails = jsonResponse['data']['details'];
@@ -191,17 +189,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: Container(
-                                padding: EdgeInsets.only(top: 15),
-                                child: Text(
-                                  "Choose Quantity",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 17,
-                                      color: Colors.blueAccent[700]),
-                                ))),
                         Expanded(
                             child: Container(
                           margin: EdgeInsets.only(top: 20),
@@ -220,6 +207,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 width: MediaQuery.of(context).size.width * 0.35,
                                 child: TextField(
                                   onChanged: (text) {
+                                    setState(() {
+                                      totalPrice = 0.00;
+                                    });
                                     _getTotalPrice();
                                   },
                                   controller: _quantity,
@@ -232,6 +222,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     hintStyle: TextStyle(
                                         fontSize: 15.0,
                                         color: Colors.blueAccent),
+                                    hintText: 'Choose quantity',
                                     border: InputBorder.none,
                                     filled: true,
                                     //fillColor: Colors.white,
@@ -281,23 +272,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ),
                             ],
                           ),
-                        ))
+                        )),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          margin: EdgeInsets.only(top: 20),
+                          alignment: Alignment.topLeft,
+                          color: Colors.blueAccent[700],
+                          padding: EdgeInsets.all(7),
+                          child: Column(
+                            children: [
+                              Text(
+                                "Total Amount",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 15,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                '\u{20B9}' +
+                                    '${(totalPrice != null ? totalPrice : '0.00')}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16,
+                                    color: Colors.white),
+                              )
+                            ],
+                          ),
+                        ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      color: Colors.blueAccent[700],
-                      padding: EdgeInsets.all(6),
-                      child: Text(
-                        "Total Amount",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 20,
-                            color: Colors.white),
-                      ),
                     ),
                   ],
                 ),
@@ -369,17 +371,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           }),
         );
 
-        print(response);
         if (response.statusCode == 200) {
           jsonResponse = jsonDecode(response.body);
-          print(jsonResponse);
           setState(() {
             isLoading = false;
           });
 
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (BuildContext context) => CartPage()),
-              (Route<dynamic> route) => false);
+              (Route<dynamic> route) => true);
         }
       } catch (e) {
         print("error:$e");
@@ -388,17 +388,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   void _getTotalPrice() async {
-    print("@1");
     var amount = double.parse(_quantity.text);
-    print(amount);
     if (_quantityType == 'GM') {
       amount = amount / 1000;
     }
-    print(amount);
     double calculatedPrice = amount * double.parse(orginalPrice);
     //print(calculatedPrice);
     var a = calculatedPrice.toStringAsFixed(2);
-    print(a);
     setState(() {
       totalPrice = a;
     });

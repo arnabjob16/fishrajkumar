@@ -1,3 +1,4 @@
+import 'package:fishRajkumar/components/Header.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -51,106 +52,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(130.0),
-          // here the desired height
-          child: AppBar(
-            automaticallyImplyLeading: false, // hides leading widget
-            flexibleSpace: Column(children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // Image.asset(
-                  //   "assets/logos/logo.png",
-                  //   fit: BoxFit.cover,
-                  //   height: 60,
-                  // ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.26,
-                        ),
-                        Text("Fish ",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0)),
-                        Text("Rajkumar",
-                            style: TextStyle(
-                                color: Colors.yellow,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0))
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      IconButton(
-                        icon: new Icon(Icons.shopping_cart_outlined,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: new Icon(Icons.notifications_none_rounded,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  height: 40.0,
-                  child: new GestureDetector(
-                    onTap: () {
-                      setState(() {});
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Pressed"),
-                        backgroundColor: Colors.blueAccent[700],
-                      ));
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black45, // red as border color.
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[300],
-                              blurRadius: 3.0,
-                            ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 5.0,
-                            ),
-                            Icon(Icons.search),
-                            SizedBox(
-                              width: 5.0,
-                            ),
-                            Text(
-                              'Search for Items, Categories',
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17.0,
-                                  color: Colors.black54),
-                            )
-                          ],
-                        )),
-                  )),
-            ]),
-            backgroundColor: Colors.blueAccent[200],
-          ),
-        ),
+        appBar: Header(),
         body: isLoading
             ? Center(
                 child: CircularProgressIndicator(),
@@ -183,10 +85,6 @@ class _CartPageState extends State<CartPage> {
                                                   .size
                                                   .width *
                                               .4,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              5,
                                           child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
@@ -200,7 +98,7 @@ class _CartPageState extends State<CartPage> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .6,
+                                              .8,
                                           child: Column(
                                             children: <Widget>[
                                               Container(
@@ -219,97 +117,149 @@ class _CartPageState extends State<CartPage> {
                                                   ),
                                                 ),
                                               ),
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(top: 10.0),
-                                                child: TextField(
-                                                  controller: _quantity,
-                                                  cursorColor:
-                                                      Colors.blueAccent,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  autocorrect: false,
-                                                  style: TextStyle(
-                                                      color: Colors.blueAccent,
-                                                      fontSize: 15.0),
-                                                  decoration: InputDecoration(
-                                                      hintText: 'Quantity',
-                                                      hintStyle: TextStyle(
-                                                          fontSize: 15.0,
-                                                          color: Colors
-                                                              .blueAccent),
-                                                      border: InputBorder.none,
-                                                      filled: true,
-                                                      //fillColor: Colors.white,
-                                                      contentPadding:
-                                                          EdgeInsets.all(10.0),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .blueAccent,
-                                                            width: 2.0),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .blueAccent,
-                                                            width: 2.0),
-                                                      )),
-                                                ),
-                                              ),
-                                              Container(
-                                                height: 48.0,
-                                                margin:
-                                                    EdgeInsets.only(top: 10.0),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white70,
-                                                    border: Border(
-                                                        top: BorderSide(
-                                                            width: 2.0,
-                                                            color: Colors
-                                                                .blueAccent),
-                                                        right: BorderSide(
-                                                            width: 2.0,
-                                                            color: Colors
-                                                                .blueAccent),
-                                                        left: BorderSide(
-                                                            width: 2.0,
-                                                            color: Colors
-                                                                .blueAccent),
-                                                        bottom: BorderSide(
-                                                            width: 2.0,
-                                                            color: Colors
-                                                                .blueAccent))),
-                                                child:
-                                                    DropdownButtonHideUnderline(
-                                                  child: DropdownButton<String>(
-                                                    isExpanded: true,
-                                                    isDense: true,
-                                                    value: _quantityType,
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      setState(() {
-                                                        _quantityType =
-                                                            newValue;
-                                                      });
-                                                    },
-                                                    items: <String>[
-                                                      'GM',
-                                                      'KG'
-                                                    ].map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                        (String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                  ),
-                                                ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                      child: Container(
+                                                          margin: EdgeInsets
+                                                              .fromLTRB(
+                                                                  0, 5, 20, 0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border(
+                                                              bottom:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                        .blueAccent[
+                                                                    700],
+                                                                width: 2.0,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.4,
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        top:
+                                                                            10.0),
+                                                                child:
+                                                                    TextField(
+                                                                  controller:
+                                                                      _quantity,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .blueAccent,
+                                                                  keyboardType:
+                                                                      TextInputType
+                                                                          .number,
+                                                                  autocorrect:
+                                                                      false,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .blueAccent,
+                                                                      fontSize:
+                                                                          15.0),
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    hintStyle: TextStyle(
+                                                                        fontSize:
+                                                                            15.0,
+                                                                        color: Colors
+                                                                            .blueAccent),
+                                                                    hintText:
+                                                                        'Choose quantity',
+                                                                    border:
+                                                                        InputBorder
+                                                                            .none,
+                                                                    filled:
+                                                                        true,
+                                                                    //fillColor: Colors.white,
+                                                                    contentPadding:
+                                                                        EdgeInsets.all(
+                                                                            10.0),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                height: 48.0,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.30,
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        top:
+                                                                            10.0),
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .white70,
+                                                                    border: Border(
+                                                                        top: BorderSide(
+                                                                            width:
+                                                                                0,
+                                                                            color: Colors
+                                                                                .blueAccent),
+                                                                        right: BorderSide(
+                                                                            width:
+                                                                                0,
+                                                                            color: Colors
+                                                                                .blueAccent),
+                                                                        bottom: BorderSide(
+                                                                            width:
+                                                                                0,
+                                                                            color:
+                                                                                Colors.blueAccent))),
+                                                                child:
+                                                                    DropdownButtonHideUnderline(
+                                                                  child:
+                                                                      DropdownButton<
+                                                                          String>(
+                                                                    isExpanded:
+                                                                        true,
+                                                                    isDense:
+                                                                        true,
+                                                                    value:
+                                                                        _quantityType,
+                                                                    onChanged:
+                                                                        (String
+                                                                            newValue) {
+                                                                      setState(
+                                                                          () {
+                                                                        _quantityType =
+                                                                            newValue;
+                                                                      });
+                                                                    },
+                                                                    items: <
+                                                                        String>[
+                                                                      'GM',
+                                                                      'KG'
+                                                                    ].map<
+                                                                        DropdownMenuItem<
+                                                                            String>>((String
+                                                                        value) {
+                                                                      return DropdownMenuItem<
+                                                                          String>(
+                                                                        value:
+                                                                            value,
+                                                                        child: Text(
+                                                                            value),
+                                                                      );
+                                                                    }).toList(),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )))
+                                                ],
                                               ),
                                               Container(
                                                 margin: EdgeInsets.fromLTRB(
@@ -329,51 +279,43 @@ class _CartPageState extends State<CartPage> {
                                                               FontWeight.bold,
                                                           color: Colors.black),
                                                     ),
-                                                    Text(
-                                                      productList[index][
-                                                              'discount_percent'] +
-                                                          "% off",
-                                                      style: TextStyle(
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons.edit,
+                                                          ),
+                                                          iconSize: 30,
                                                           color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    IconButton(
-                                                      icon: Icon(
-                                                        Icons.edit,
-                                                      ),
-                                                      iconSize: 30,
-                                                      color: Colors.green,
-                                                      splashColor:
-                                                          Colors.purple,
-                                                      onPressed: () {},
-                                                    ),
-                                                    IconButton(
-                                                      icon: Icon(
-                                                        Icons.delete,
-                                                      ),
-                                                      iconSize: 30,
-                                                      color: Colors.green,
-                                                      splashColor:
-                                                          Colors.purple,
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          isLoading = true;
-                                                        });
-                                                        removeCart(productList[
-                                                                index]
-                                                            ['cart_row_id']);
-                                                      },
-                                                    ),
+                                                          splashColor:
+                                                              Colors.purple,
+                                                          onPressed: () {},
+                                                        ),
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons.delete,
+                                                          ),
+                                                          iconSize: 30,
+                                                          color: Colors.red,
+                                                          splashColor:
+                                                              Colors.purple,
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              isLoading = true;
+                                                            });
+                                                            removeCart(productList[
+                                                                    index][
+                                                                'cart_row_id']);
+                                                          },
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        )
+                                                      ],
+                                                    )
                                                   ],
                                                 ),
                                               ),

@@ -1,4 +1,5 @@
 import 'package:fishRajkumar/pages/DashboardPage.dart';
+import 'package:fishRajkumar/pages/OtherPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fishRajkumar/pages/OrderListPage.dart';
 
@@ -19,6 +20,9 @@ class _NavBarState extends State<NavBar> {
       } else if (_selectedIndex == 2) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => OrderListPage()));
+      } else if (_selectedIndex == 3) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => OtherPage()));
       }
     });
   }
