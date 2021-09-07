@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fishRajkumar/components/Header.dart';
+import 'package:fishRajkumar/pages/AddressListPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fishRajkumar/components/Config.dart';
 import 'package:fishRajkumar/components/NavBar.dart';
@@ -9,11 +11,15 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 double shipping;
+var rkey = '';
+var appname = '';
+var description = '';
 var userid = '';
 var email = '';
-var mobile = '';
+var phone = '';
 double subtotal = 0.00;
 double alltotal = 0.00;
+String defaultaddress = '';
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -23,6 +29,7 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   List cartProduct = [];
   bool cartProductLoading = true;
+  String defaultaddress = '';
   @override
   void initState() {
     super.initState();
@@ -41,7 +48,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     setState(() {
       shipping = double.parse(prefs.getString('shipping'));
       email = prefs.getString('email');
-      mobile = prefs.getString('mobile');
+      phone = prefs.getString('phone');
       userid = prefs.getString('userid');
     });
   }
@@ -52,61 +59,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0),
-          // here the desired height
-          child: AppBar(
-            automaticallyImplyLeading: false, // hides leading widget
-            flexibleSpace: Column(children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // Image.asset(
-                  //   "assets/logos/logo.png",
-                  //   fit: BoxFit.cover,
-                  //   height: 60,
-                  // ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.26,
-                        ),
-                        Text("Fish ",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0)),
-                        Text("Rajkumar",
-                            style: TextStyle(
-                                color: Colors.yellow,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0))
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      IconButton(
-                        icon: new Icon(Icons.shopping_cart_outlined,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: new Icon(Icons.notifications_none_rounded,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ]),
-            backgroundColor: Colors.blueAccent[200],
-          ),
-        ),
+        appBar: Header(),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -156,11 +109,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .4,
+                                              .3,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height /
-                                              5,
+                                              8,
                                           child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
@@ -175,26 +128,59 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .6,
+                                              .7,
                                           child: Column(
                                             children: <Widget>[
-                                              Container(
-                                                child: Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    cartProduct[index]
-                                                        ['product_name'],
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .blueAccent[700],
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 15.0),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text(
+                                                        cartProduct[index]
+                                                            ['product_name'],
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                    .blueAccent[
+                                                                700],
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  Container(
+                                                    color:
+                                                        Colors.blueAccent[700],
+                                                    padding: EdgeInsets.all(6),
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        0, 5, 0, 0),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          '\u{20B9}' +
+                                                              cartProduct[index]
+                                                                  [
+                                                                  'total_price'],
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 14.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                               SizedBox(
-                                                height: 6.0,
+                                                height: 3.0,
                                               ),
                                               Container(
                                                 child: Align(
@@ -215,41 +201,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               SizedBox(
                                                 height: 6.0,
                                               ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    0, 5, 0, 0),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      '\u{20B9}' +
-                                                          cartProduct[index]
-                                                              ['total_price'],
-                                                      style: TextStyle(
-                                                          color: Colors.black87,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontSize: 14.0),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              Container(
-                                                child: Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    '20% off',
-                                                    style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14.0,
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
                                             ],
                                           ),
                                         ),
@@ -263,22 +214,45 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                padding: EdgeInsets.only(bottom: 10.0),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.black45,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
+                margin: EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
                 child: Text(
-                  "+ Add Address",
+                  "Address",
+                  style: TextStyle(
+                      color: Colors.blueAccent[700],
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                child: Text(
+                  defaultaddress,
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18.0),
+                      fontSize: 16.0),
+                ),
+              ),
+              SizedBox(height: 5.0),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+                child: FractionallySizedBox(
+                  widthFactor:
+                      1, // means 100%, you can change this to 0.8 (80%)
+                  child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(3.0),
+                    ),
+                    color: Colors.blueAccent[700],
+                    onPressed: () {
+                      AddressListPage();
+                    },
+                    label: Text('Change & Add Address',
+                        style: TextStyle(color: Colors.white)),
+                    icon: Icon(Icons.home, color: Colors.white),
+                  ),
                 ),
               ),
               Container(
@@ -388,6 +362,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Future<List<dynamic>> getcartproduct() async {
     var jsonResponse;
+    var PjsonResponse;
+    var payment = await http.post(
+      Uri.parse(Config.site_url + "paymentsettings"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    PjsonResponse = json.decode(payment.body);
+
+    if (payment.statusCode == 200) {
+      if (PjsonResponse['success'] == true) {
+        setState(() {
+          rkey = PjsonResponse['data']['key'];
+          appname = PjsonResponse['data']['name'];
+          description = PjsonResponse['data']['description'];
+        });
+      }
+    }
+    print(PjsonResponse);
 
     var result = await http.post(
       Uri.parse(Config.site_url + "getcartdetails"),
@@ -398,19 +391,29 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'user_id': '1',
       }),
     );
-
     jsonResponse = json.decode(result.body);
-    //print(jsonResponse);
+    print(jsonResponse['data']);
     if (result.statusCode == 200) {
       if (jsonResponse['success'] == true) {
-        jsonResponse['data'].forEach(
-            (v) => {subtotal = subtotal + double.parse(v['total_price'])});
+        jsonResponse['data']['cartdata'].forEach((v) => {
+              subtotal = subtotal + double.parse(v['total_price']),
+            });
         setState(() {
           subtotal = subtotal;
           alltotal = subtotal + shipping;
-          cartProduct = jsonResponse['data'];
+          cartProduct = jsonResponse['data']['cartdata'];
+          defaultaddress = jsonResponse['data']['defaultaddress']['address'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['pincode'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['city'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['state'] +
+              ', ' +
+              jsonResponse['data']['defaultaddress']['country'];
           cartProductLoading = false;
         });
+
         //print(productCategories);
         //return jsonResponse['data'];
       } else {
@@ -433,14 +436,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   void openCheckout() async {
     var options = {
-      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'key': rkey,
       'amount': (alltotal * 100).toStringAsFixed(2),
-      'name': 'Rajkumar',
-      'description': 'Fine T-Shirt',
-      'prefill': {'contact': '8888888888', 'email': email},
-      'external': {
-        'wallets': ['paytm']
-      }
+      //'amount': 500,
+      'name': appname,
+      'description': description,
+      'prefill': {'contact': phone, 'email': email},
+      'external': {}
     };
 
     try {

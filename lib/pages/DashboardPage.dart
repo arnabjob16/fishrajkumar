@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fishRajkumar/components/HomeHeader.dart';
 import 'package:fishRajkumar/pages/CheckoutPage.dart';
 import 'package:fishRajkumar/pages/LoginPage.dart';
 import 'package:fishRajkumar/pages/ProductPage.dart';
@@ -35,101 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(130.0),
-          // here the desired height
-          child: AppBar(
-            automaticallyImplyLeading: false, // hides leading widget
-            flexibleSpace: Column(children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.26,
-                        ),
-                        Text("Fish ",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0)),
-                        Text("Rajkumar",
-                            style: TextStyle(
-                                color: Colors.yellow,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0))
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      IconButton(
-                        icon: new Icon(Icons.shopping_cart_outlined,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: new Icon(Icons.notifications_none_rounded,
-                            color: Colors.white, size: 27.0),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  height: 40.0,
-                  child: new GestureDetector(
-                    onTap: () {
-                      setState(() {});
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Pressed"),
-                        backgroundColor: Colors.blueAccent[700],
-                      ));
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black45, // red as border color.
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[300],
-                              blurRadius: 3.0,
-                            ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 5.0,
-                            ),
-                            Icon(Icons.search),
-                            SizedBox(
-                              width: 5.0,
-                            ),
-                            Text(
-                              'Search for Items, Categories',
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17.0,
-                                  color: Colors.black54),
-                            )
-                          ],
-                        )),
-                  )),
-            ]),
-            backgroundColor: Colors.blueAccent[200],
-          ),
-        ),
+        appBar: HomeHeader(),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -245,8 +152,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     return GestureDetector(
                       onTap: () {
                         var route = new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new CheckoutPage());
+                            builder: (BuildContext context) => new ProductPage(
+                                  value: productCategories[index]['id'],
+                                ));
                         Navigator.of(context).push(route);
                       },
                       child: Container(
@@ -403,7 +311,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           var route = new MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  new LoginPage());
+                                  new CheckoutPage());
                           Navigator.of(context).push(route);
                         },
                         child: Container(
@@ -512,7 +420,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                           child: Align(
                                             alignment: Alignment.topLeft,
                                             child: Text(
-                                              '20% off',
+                                              '${todaysdealproduct[index]["discount_percent"]}% off',
                                               style: TextStyle(
                                                 color: Colors.green,
                                                 fontWeight: FontWeight.w700,
@@ -626,7 +534,7 @@ class _DashboardPageState extends State<DashboardPage> {
           todaysdealproduct = jsonResponse['data'];
           todaysdealLoading = false;
         });
-        print(todaysdealproduct);
+        //print(todaysdealproduct);
         //return jsonResponse['data'];
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
